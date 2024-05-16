@@ -13,8 +13,8 @@ provider "devops-bootcamp" {
 data "devops-bootcamp_engineer" "test" {}
 
 resource "devops-bootcamp_engineer_resource" "test" {
-    name = "MeherL"
-    email = "Meher@finches.com"
+    name = "alice"
+    email = "alice@finches.com"
 }
 
 output "test_output" {
