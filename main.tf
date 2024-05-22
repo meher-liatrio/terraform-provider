@@ -19,11 +19,15 @@ resource "devops-bootcamp_engineer_resource" "alice" {
     email = "alice@finches.com"
 }
 
-resource "devops-bootcamp_engineer_resource" "bob" {
-    name = "bob"
-    email = "bob@finches.com"
+import {
+  to = devops-bootcamp_engineer_resource.bob
+  id = "AJK5Y"
 }
 
+resource "devops-bootcamp_engineer_resource" "bob" {
+  name = "bob ross"
+  email = "bob@ross.com"
+}
 
 resource "devops-bootcamp_engineer_resource" "eve" {
     name = "eve"
@@ -31,10 +35,10 @@ resource "devops-bootcamp_engineer_resource" "eve" {
 }
 
 
-resource "devops-bootcamp_engineer_resource" "sloane" {
-    name = "sloane"
-    email = "sloane@finches.com"
-}
+# resource "devops-bootcamp_engineer_resource" "sloane" {
+#     name = "sloane"
+#     email = "sloane@finches.com"
+# }
 
 resource "devops-bootcamp_engineer_resource" "grant" {
     name = "grant"
@@ -46,18 +50,18 @@ resource "devops-bootcamp_engineer_resource" "myles" {
     email = "myles@finches.com"
 }
 
-resource "devops-bootcamp_engineer_resource" "meher" {
-    name = "meher"
-    email = "meher@finches.com"
-}
+# resource "devops-bootcamp_engineer_resource" "meher" {
+#     name = "meher"
+#     email = "meher@finches.com"
+# }
 
 resource "devops-bootcamp_dev_resource" "dev_finches" {
         name = "dev_finches"
         engineers = [
-          {id=devops-bootcamp_engineer_resource.meher.id},
+          # {id=devops-bootcamp_engineer_resource.meher.id},
           {id=devops-bootcamp_engineer_resource.myles.id},
           {id=devops-bootcamp_engineer_resource.grant.id},
-          {id=devops-bootcamp_engineer_resource.sloane.id}
+          {id=devops-bootcamp_engineer_resource.bob.id}
           ]     
 }
 

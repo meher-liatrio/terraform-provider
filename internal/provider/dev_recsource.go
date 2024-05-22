@@ -71,18 +71,18 @@ func (r *devResource) Schema(_ context.Context, _ resource.SchemaRequest, resp *
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
 							Computed: true,
-							// PlanModifiers: []planmodifier.String{
-							// 	stringplanmodifier.UseStateForUnknown(),
-							// },
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.UseStateForUnknown(),
+							},
 						},
 						"id": schema.StringAttribute{
 							Required: true,
 						},
 						"email": schema.StringAttribute{
 							Computed: true,
-							// PlanModifiers: []planmodifier.String{
-							// 	stringplanmodifier.UseStateForUnknown(),
-							// },
+							PlanModifiers: []planmodifier.String{
+								stringplanmodifier.UseStateForUnknown(),
+							},
 						},
 					},
 				},
