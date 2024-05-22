@@ -12,7 +12,6 @@ import (
 	// devops_resource "github.com/liatrio/devops-bootcamp/examples/ch7/devops-resources"
 
 	"github.com/hashicorp/terraform-plugin-framework/datasource"
-	"github.com/hashicorp/terraform-plugin-framework/function"
 	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/provider"
 	"github.com/hashicorp/terraform-plugin-framework/provider/schema"
@@ -26,7 +25,8 @@ import (
 
 // Ensure devopsBootcampProvider satisfies various provider interfaces.
 var _ provider.Provider = &devopsBootcampProvider{}
-var _ provider.ProviderWithFunctions = &devopsBootcampProvider{}
+
+// var _ provider.ProviderWithFunctions = &devopsBootcampProvider{}
 
 // devopsBootcampProvider defines the provider implementation.
 type devopsBootcampProvider struct {
@@ -129,18 +129,14 @@ func (p *devopsBootcampProvider) Configure(ctx context.Context, req provider.Con
 func (p *devopsBootcampProvider) Resources(ctx context.Context) []func() resource.Resource {
 	return []func() resource.Resource{
 		NewEngineerResource,
+		NewDevResource,
 	}
 }
 
 func (p *devopsBootcampProvider) DataSources(ctx context.Context) []func() datasource.DataSource {
 	return []func() datasource.DataSource{
 		NewEngineerDataSource,
-	}
-}
-
-func (p *devopsBootcampProvider) Functions(ctx context.Context) []func() function.Function {
-	return []func() function.Function{
-		NewExampleFunction,
+		NewDevDataSource,
 	}
 }
 

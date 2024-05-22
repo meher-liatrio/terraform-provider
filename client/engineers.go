@@ -10,6 +10,7 @@ import (
 	devops_resource "github.com/liatrio/devops-bootcamp/examples/ch7/devops-resources"
 )
 
+// GetEngineer - Returns a single engineer
 func (c *Client) GetEngineer(engineerID string) (*devops_resource.Engineer, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers/id/%s", c.HostURL, engineerID), nil)
 	if err != nil {
@@ -30,7 +31,7 @@ func (c *Client) GetEngineer(engineerID string) (*devops_resource.Engineer, erro
 	return &engineer, nil
 }
 
-// GetEngineers - Returns list of engineers (no auth required)
+// GetEngineers - Returns list of engineers
 func (c *Client) GetEngineers() ([]devops_resource.Engineer, error) {
 	req, err := http.NewRequest("GET", fmt.Sprintf("%s/engineers", c.HostURL), nil)
 	if err != nil {
@@ -72,13 +73,13 @@ func (c *Client) CreateEngineer(engineer devops_resource.Engineer) (*devops_reso
 	}
 
 	// Unmarshal the response into an Engineer struct
-	order := devops_resource.Engineer{}
-	err = json.Unmarshal(body, &order)
+	engineerObj := devops_resource.Engineer{}
+	err = json.Unmarshal(body, &engineerObj)
 	if err != nil {
 		return nil, err
 	}
 
-	return &order, nil
+	return &engineerObj, nil
 }
 
 // UpdateEngineer - Update an existing engineer

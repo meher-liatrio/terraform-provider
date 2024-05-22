@@ -54,17 +54,21 @@ func (d *engineerDataSource) Schema(_ context.Context, _ datasource.SchemaReques
 	resp.Schema = schema.Schema{
 		Attributes: map[string]schema.Attribute{
 			"engineer": schema.ListNestedAttribute{
-				Computed: true,
+				MarkdownDescription: "Engineer attribute",
+				Computed:            true,
 				NestedObject: schema.NestedAttributeObject{
 					Attributes: map[string]schema.Attribute{
 						"name": schema.StringAttribute{
-							Required: true,
+							MarkdownDescription: "Engineer Name required",
+							Required:            true,
 						},
 						"id": schema.StringAttribute{
-							Computed: true,
+							MarkdownDescription: "Engineer ID computed",
+							Computed:            true,
 						},
 						"email": schema.StringAttribute{
-							Required: true,
+							MarkdownDescription: "Engineer Email required",
+							Required:            true,
 						},
 					},
 				},

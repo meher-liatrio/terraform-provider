@@ -4,7 +4,9 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"time"
 
+	"github.com/hashicorp/terraform-plugin-framework/path"
 	"github.com/hashicorp/terraform-plugin-framework/resource"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema"
 	"github.com/hashicorp/terraform-plugin-framework/resource/schema/planmodifier"
@@ -16,8 +18,9 @@ import (
 
 // Ensure the implementation satisfies the expected interfaces.
 var (
-	_ resource.Resource              = &engineerResource{}
-	_ resource.ResourceWithConfigure = &engineerResource{}
+	_ resource.Resource                = &engineerResource{}
+	_ resource.ResourceWithConfigure   = &engineerResource{}
+	_ resource.ResourceWithImportState = &engineerResource{}
 )
 
 // NewOrderResource is a helper function to simplify the provider implementation.
@@ -32,9 +35,10 @@ type engineerResource struct {
 
 // engineerResourceModel maps engineer schema data.
 type engineerResourceModel struct {
-	Name  string       `tfsdk:"name"`
-	Id    types.String `tfsdk:"id"`
-	Email string       `tfsdk:"email"`
+	Name        types.String `tfsdk:"name"`
+	Id          types.String `tfsdk:"id"`
+	Email       types.String `tfsdk:"email"`
+	LastUpdated types.String `tfsdk:"last_updated"`
 }
 
 // Metadata returns the resource type name.
@@ -58,11 +62,14 @@ func (r *engineerResource) Schema(_ context.Context, _ resource.SchemaRequest, r
 			"email": schema.StringAttribute{
 				Required: true, // Email must be provided by the user
 			},
+			"last_updated": schema.StringAttribute{
+				Computed: true,
+			},
 		},
 	}
 }
 
-// Create a new resource.
+// Create a new engineer resource.
 func (r *engineerResource) Create(ctx context.Context, req resource.CreateRequest, resp *resource.CreateResponse) {
 	log.Printf("Debug: Create request: %v", req)
 	// Retrieve values from plan
@@ -75,9 +82,9 @@ func (r *engineerResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	var engineerObject devops_resource.Engineer
-	engineerObject.Name = plan.Name
-	engineerObject.Id = plan.Id.String()
-	engineerObject.Email = plan.Email
+	engineerObject.Name = plan.Name.ValueString()
+	engineerObject.Id = plan.Id.ValueString()
+	engineerObject.Email = plan.Email.ValueString()
 
 	// Print to standard logger; this will appear if TF_LOG=DEBUG is set
 	log.Printf("Debug: Engineer Object: %#v", engineerObject)
@@ -94,11 +101,11 @@ func (r *engineerResource) Create(ctx context.Context, req resource.CreateReques
 	}
 
 	// Map response body to schema and populate Computed attribute values
-	plan.Name = engineer.Name
+	plan.Name = types.StringValue(engineer.Name)
 	plan.Id = types.StringValue(engineer.Id)
-	plan.Email = engineer.Email
+	plan.Email = types.StringValue(engineer.Email)
 
-	// plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
+	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	// Set state to fully populated data
 	diags = resp.State.Set(ctx, plan)
@@ -132,9 +139,9 @@ func (r *engineerResource) Read(ctx context.Context, req resource.ReadRequest, r
 	}
 
 	// Map response body to schema and populate Computed attribute values
-	state.Name = engineer.Name
+	state.Name = types.StringValue(engineer.Name)
 	state.Id = types.StringValue(engineer.Id)
-	state.Email = engineer.Email
+	state.Email = types.StringValue(engineer.Email)
 
 	// Set refreshed state
 	diags = resp.State.Set(ctx, &state)
@@ -157,9 +164,9 @@ func (r *engineerResource) Update(ctx context.Context, req resource.UpdateReques
 
 	// Generate API request body from plan
 	var engineerObject devops_resource.Engineer
-	engineerObject.Name = plan.Name
-	engineerObject.Id = plan.Id.String()
-	engineerObject.Email = plan.Email
+	engineerObject.Name = plan.Name.ValueString()
+	engineerObject.Id = plan.Id.ValueString()
+	engineerObject.Email = plan.Email.ValueString()
 
 	// Print to standard logger; this will appear if TF_LOG=DEBUG is set
 	log.Printf("Debug: Engineer Object: %#v", engineerObject)
@@ -175,11 +182,11 @@ func (r *engineerResource) Update(ctx context.Context, req resource.UpdateReques
 	}
 
 	// Map response body to schema and populate Computed attribute values
-	plan.Name = engineer.Name
+	plan.Name = types.StringValue(engineer.Name)
 	plan.Id = types.StringValue(engineer.Id)
-	plan.Email = engineer.Email
+	plan.Email = types.StringValue(engineer.Email)
 
-	// plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
+	plan.LastUpdated = types.StringValue(time.Now().Format(time.RFC850))
 
 	// Set state to fully populated data
 	diags = resp.State.Set(ctx, plan)
@@ -228,4 +235,9 @@ func (r *engineerResource) Configure(_ context.Context, req resource.ConfigureRe
 	}
 
 	r.client = client
+}
+
+func (r *engineerResource) ImportState(ctx context.Context, req resource.ImportStateRequest, resp *resource.ImportStateResponse) {
+	// Retrieve import ID and save to id attribute
+	resource.ImportStatePassthroughID(ctx, path.Root("id"), req, resp)
 }
