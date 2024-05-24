@@ -1,3 +1,8 @@
+// Configure is a method that configures the devops-bootcamp provider.
+// It retrieves the provider data from the configuration and sets up the DevOps Bootcamp client.
+// It checks for any missing or unknown configuration values and provides appropriate error messages.
+// It also sets the host value in the configuration or uses the HOST environment variable.
+// Finally, it creates a new DevOps API client using the configuration values and makes it available during DataSource and Resource type Configure methods.
 // Copyright (c) HashiCorp, Inc.
 // SPDX-License-Identifier: MPL-2.0
 
@@ -25,8 +30,6 @@ import (
 
 // Ensure devopsBootcampProvider satisfies various provider interfaces.
 var _ provider.Provider = &devopsBootcampProvider{}
-
-// var _ provider.ProviderWithFunctions = &devopsBootcampProvider{}
 
 // devopsBootcampProvider defines the provider implementation.
 type devopsBootcampProvider struct {
@@ -59,6 +62,11 @@ func (p *devopsBootcampProvider) Schema(ctx context.Context, req provider.Schema
 	}
 }
 
+// Configure configures the devops-bootcamp provider.
+// It retrieves the provider data from the configuration and sets up the DevOps Bootcamp client.
+// It checks for any missing or unknown configuration values and provides appropriate error messages.
+// It also sets the host value in the configuration or uses the HOST environment variable.
+// Finally, it creates a new DevOps API client using the configuration values and makes it available during DataSource and Resource type Configure methods.
 func (p *devopsBootcampProvider) Configure(ctx context.Context, req provider.ConfigureRequest, resp *provider.ConfigureResponse) {
 	tflog.Info(ctx, "Configuring devops-bootcamp client")
 
@@ -123,7 +131,7 @@ func (p *devopsBootcampProvider) Configure(ctx context.Context, req provider.Con
 	resp.DataSourceData = client
 	resp.ResourceData = client
 
-	tflog.Info(ctx, "Configured devops-bootcamp client", map[string]any{"success": true})
+	tflog.Info(ctx, "Configured devops-bootcamp client", map[string]interface{}{"success": true})
 }
 
 func (p *devopsBootcampProvider) Resources(ctx context.Context) []func() resource.Resource {

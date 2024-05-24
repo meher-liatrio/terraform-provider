@@ -39,3 +39,11 @@ website/vendor
 
 # debug
 __debug_bin*
+
+.plugin-cache
+
+.terraform
+
+terraform.tfstate
+
+terraform.tfstate.backup

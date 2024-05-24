@@ -140,12 +140,5 @@ func (c *Client) DeleteEngineer(id string) error {
 		return err
 	}
 
-	// Unmarshal the response into an Engineer struct
-	// an_engineer := devops_resource.Engineer{}
-	if err != nil {
-		log.Printf("\nError unmarshalling response: %s\n", err) // Add debug log
-		return err
-	}
-
 	return nil
 }

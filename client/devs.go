@@ -141,13 +141,6 @@ func (c *Client) DeleteDev(id string) error {
 		return err
 	}
 
-	// Unmarshal the response into an Dev struct
-	// an_dev := devops_resource.Dev{}
-	if err != nil {
-		log.Printf("\nError unmarshalling response: %s\n", err) // Add debug log
-		return err
-	}
-
 	return nil
 }
 

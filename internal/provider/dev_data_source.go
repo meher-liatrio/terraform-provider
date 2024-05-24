@@ -33,7 +33,6 @@ type devDataSourceModel struct {
 	Devs []devModel `tfsdk:"devs"`
 }
 
-// hard coding for readability -- can also be imported via devops_resource
 // devModel maps dev schema data.
 type devModel struct {
 	Name        types.String     `tfsdk:"name"`
